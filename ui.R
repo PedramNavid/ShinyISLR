@@ -105,7 +105,7 @@ islr22UI <- function(id, label = "Assessing Model Accuracy") {
                                                      '3.0 Polynomial Function 2' = 'func2',
                                                      '3.1 Polynomial Function 3' = 'func3')),
                                       sliderInput(ns("df29"), "Degrees of Freedom", 
-                                                     min = 1, max = 10, value = 1, step = 1, round = TRUE)
+                                                     min = 1, max = 20, value = 1, step = 1, round = TRUE)
                         ),
                         mainPanel(
                           plotOutput(ns("plot29"))

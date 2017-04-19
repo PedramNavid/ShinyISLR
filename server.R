@@ -84,7 +84,6 @@ islr21 <- function(input, output, session) {
   
   output$plot23 <- renderPlot({
     plot_3d_model(mdl_income2_loess)
-    
   })
   
   output$plot24 <- renderPlot({
@@ -97,12 +96,97 @@ islr21 <- function(input, output, session) {
       plot_3d_model(mdl_income2_spline_rough, col='yellow')
     
   })
- 
+}
+
+islr22 <- function(input, output, session) {
   
+  # Function generator
+  get_function <- reactive({
+    q <- 1:100
+    switch(input$func29,
+           "func1" = (8000 + 20*q - 5*q^2 + 0.045*q^3) / 1000,
+           "func2" = 2 + 0.02*q + 0.00004*q^2,
+           "func3" = -(10 - 10*q + 10.5*q^2 - 0.54*q^3 + 0.00435*q^4) / 1500
+    )
+    
+    
+  })
   
+  # Create random dataset from function
+  create_data <- function() {
+    set.seed(1234)
+    
+    f <- get_function()
+    
+    noise <- rnorm(length(q), mean = 0, sd = 1)
+    data <- data.frame(x = q, y = f + noise)
+    
+    idx <- sample(q, length(q) * 0.5, replace = F)
+    train <- data[idx,]
+    test <- data[-idx,]
+    list(
+      train = train,
+      test = test
+    )
+  }
+  
+  # Creates a train and test model and calculates MSE
+  create_model <- function(train, test, power = 2) {
+    
+    fml <- as.formula(y ~ poly(x, power))
+    fit_lm <- lm(fml, data = train)
+    
+    pred_lm <- predict(fit_lm)
+    train_mse <- round(Metrics::mse(pred_lm, train$y), 3)
+    
+    # Test MSE
+    pred_lm_test <- predict(fit_lm, newdata = test)
+    test_mse <- round(Metrics::mse(pred_lm_test, test$y), 3)
+    
+    list(
+      fml = fml,
+      power = power,
+      train_mse = train_mse,
+      test_mse = test_mse,
+      train = train,
+      test = test
+    )
+  }
+  
+  output$plot29 <- renderPlot({
+    data <- create_data()
+    mdl <- create_model(data$train, data$test, power = input$df29)
+    fit = lm(mdl$fml, data = mdl$train)
+    pred_train = predict(fit)
+    
+    lower_bound <- floor(min(mdl$train$y, mdl$test$y))
+    upper_bound <- ceiling(max(mdl$train$y, mdl$test$y))
+    
+    p1 <- ggplot(mdl$train, aes(x, y)) + 
+      geom_point() + 
+      geom_smooth(method='lm', se = F, formula = mdl$fml, color = 'orange') +
+      geom_segment(aes(xend = x, yend = pred_train), color = 'grey80') +
+      ylim(lower_bound, upper_bound) +
+      geom_label(aes(x = 25, y = lower_bound, 
+                     label = paste0("Train MSE: ", mdl$train_mse)))
+    
+    pred_test= predict(fit, newdata = mdl$test)
+    
+    p2 <- ggplot(mdl$test, aes(x, y)) + 
+      geom_point() + 
+      geom_smooth(method='lm', se = F, formula = mdl$fml, data = mdl$train, color = 'orange') +
+      geom_segment(aes(xend = x, yend = pred_test), color = 'grey80') +
+      ylim(lower_bound, upper_bound) + 
+      geom_label(aes(x = 25, y = lower_bound, 
+                     label = paste0("Test MSE: ", mdl$test_mse)))
+    
+    gridExtra::grid.arrange(p1, p2, ncol = 2)
+    
+  })
   
   
 }
+
 shinyServer(function(input, output, session) {
 
   callModule(islr21, "21")

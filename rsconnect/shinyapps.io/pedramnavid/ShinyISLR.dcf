@@ -3,8 +3,8 @@ title: ShinyISLR
 account: pedramnavid
 server: shinyapps.io
 appId: 172611
-bundleId: 791201
+bundleId: 794775
 url: https://pedramnavid.shinyapps.io/ShinyISLR/
-when: 1492374978.38948
+when: 1492601062.7564
 asMultiple: FALSE
 asStatic: FALSE
