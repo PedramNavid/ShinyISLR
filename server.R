@@ -184,13 +184,16 @@ islr22 <- function(input, output, session) {
 }
 
 # 3.1 Simple Linear Regression ----
-islr31 
+islr31 <- function(input, output, session) {
+  output$plot31 <- renderPlot({qplot(1,2)})
+  output$RSS <- renderText({123})
+}
 
 # Server Call ----
 shinyServer(function(input, output, session) {
 
   callModule(islr21, "21")
   callModule(islr22, "22")
-
+  callModule(islr31, "31")
 
 })

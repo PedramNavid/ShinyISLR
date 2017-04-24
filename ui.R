@@ -117,12 +117,32 @@ islr22UI <- function(id, label = "Assessing Model Accuracy") {
 )
 }
 
+islr31UI <- function(id, label = "Simple Linear Regression") {
+  ns <- NS(id)
+  navbarMenu(label,
+    tabPanel("3.1 Simple Linear Regression",
+      sidebarLayout(
+        sidebarPanel(
+          sliderInput(ns("bhat0"), "Estimate for Intercept (B0)",
+            min = 5, max = 9, value = 7, step = 0.5, round = TRUE)
+          ,
+          sliderInput(ns("bhat1"), "Estimate for TV Coefficient (B1)",
+            min = 0.03, max = 0.06, value = 0.048, step = 0.002)
+        ),
+      mainPanel(
+        plotOutput(ns("plot31")),
+        textOutput(ns("RSS"))
+      )
+    )
+  ))
+}
 
 # UI Calls ----
 shinyUI(navbarPage(
   "ISLR 2",
   islr21UI("21"),
-  islr22UI("22")
+  islr22UI("22"),
+  islr31UI("31")
   )
   
 )
