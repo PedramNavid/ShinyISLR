@@ -4,6 +4,7 @@ library(ggplot2)
 library(ISLR)
 library(splines)
 library(gridExtra)
+library(scales)
 source("theme.R")
 
 # Set theme
@@ -185,8 +186,22 @@ islr22 <- function(input, output, session) {
 
 # 3.1 Simple Linear Regression ----
 islr31 <- function(input, output, session) {
-  output$plot31 <- renderPlot({qplot(1,2)})
-  output$RSS <- renderText({123})
+  tv_sales_fit <- lm(Sales ~ TV, data = Advertising)
+  pred_tv_sales <- predict(tv_sales_fit)
+  
+  
+
+  output$plot31 <- renderPlot({
+    ggplot(Advertising, aes(TV, Sales)) + 
+      geom_abline(slope = input$bhat1, intercept = input$bhat0) +
+      geom_segment(aes(xend = TV, yend = pred_tv_sales), color = 'grey80') +
+      geom_point(color = 'red') 
+    
+  })
+  output$RSS <- renderText({
+    yhat <- input$bhat0 + input$bhat1 * Advertising$TV
+    paste0('RSS: ', comma(sum((yhat - Advertising$Sales)^2)))
+  })
 }
 
 # Server Call ----
