@@ -1,10 +1,4 @@
-
-# This is the server logic for a Shiny web application.
-# You can find out more about building applications with Shiny here:
-#
-# http://shiny.rstudio.com
-#
-
+# Global setup ----
 library(shiny)
 library(ggplot2)
 library(ISLR)
@@ -20,7 +14,7 @@ Advertising <- read.csv("data/Advertising.csv")
 Income <- read.csv("data/Income1.csv")
 Income2 <- read.csv("data/Income2.csv")
 
-# Refactor section
+# 2.1 What is Statistical Learning ----
 islr21 <- function(input, output, session) {
 
   # Create model for Income
@@ -98,6 +92,7 @@ islr21 <- function(input, output, session) {
   })
 }
 
+# 2.2 Asessing Model Accuracy ----
 islr22 <- function(input, output, session) {
   q <- 1:100
   
@@ -188,6 +183,10 @@ islr22 <- function(input, output, session) {
   
 }
 
+# 3.1 Simple Linear Regression ----
+islr31 
+
+# Server Call ----
 shinyServer(function(input, output, session) {
 
   callModule(islr21, "21")
