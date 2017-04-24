@@ -99,13 +99,14 @@ islr21 <- function(input, output, session) {
 }
 
 islr22 <- function(input, output, session) {
+  q <- 1:100
   
   # Function generator
   get_function <- reactive({
-    q <- 1:100
+   
     switch(input$func29,
            "func1" = (8000 + 20*q - 5*q^2 + 0.045*q^3) / 1000,
-           "func2" = 2 + 0.02*q + 0.00004*q^2,
+           "func2" = 2 + 0.05*q + 0.00006*q^2,
            "func3" = -(10 - 10*q + 10.5*q^2 - 0.54*q^3 + 0.00435*q^4) / 1500
     )
     

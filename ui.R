@@ -101,9 +101,9 @@ islr22UI <- function(id, label = "Assessing Model Accuracy") {
              tabPanel("2.9 - 2.11 Flexibility",
                       sidebarLayout(
                         sidebarPanel(radioButtons(ns("func29"), "Originating Function",
-                                                   c('2.9 Polynomial Function 1' = 'func1', 
-                                                     '3.0 Polynomial Function 2' = 'func2',
-                                                     '3.1 Polynomial Function 3' = 'func3')),
+                                                   c('Polynomial Function (3 Degrees)' = 'func1', 
+                                                     'Polynomial Function (2 Degrees)' = 'func2',
+                                                     'Polynomial Function (4 Degrees)' = 'func3')),
                                       sliderInput(ns("df29"), "Degrees of Freedom", 
                                                      min = 1, max = 20, value = 1, step = 1, round = TRUE)
                         ),
