@@ -1,5 +1,6 @@
 library(shiny)
 
+# 2.1 What is Statistical Learning ----
 islr21UI <- function(id, label = "What is Statistical Learning") {
   ns <- NS(id)
   navbarMenu(label, 
@@ -95,6 +96,7 @@ islr21UI <- function(id, label = "What is Statistical Learning") {
   )
 }
 
+# 2.2 Assessing Model Accuracy ----
 islr22UI <- function(id, label = "Assessing Model Accuracy") {
   ns <- NS(id)
   navbarMenu(label, 
@@ -115,6 +117,8 @@ islr22UI <- function(id, label = "Assessing Model Accuracy") {
 )
 }
 
+
+# UI Calls ----
 shinyUI(navbarPage(
   "ISLR 2",
   islr21UI("21"),
