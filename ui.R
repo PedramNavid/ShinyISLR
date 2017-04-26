@@ -134,15 +134,29 @@ islr31UI <- function(id, label = "Simple Linear Regression") {
         textOutput(ns("RSS"))
       )
     )
-  ))
+  ),
+    tabPanel("3.3 Accuracy of Coefficient Estimate",
+      sidebarLayout(
+        sidebarPanel(
+          p("A simulated dataset showing. 100 observations generated with noise. 
+            The red line shows the true function 2 + 3X, while the blue line shows the least 
+            squares regression line. On the right, the same data is used, with the light blue
+            lines showing ten different least square regression lines using ten different random
+            samples of the original population. On average, the ten samples approach the population 
+            regression line. ")
+        )
+      )))
 }
+
+
 
 # UI Calls ----
 shinyUI(navbarPage(
   "ISLR 2",
   islr21UI("21"),
   islr22UI("22"),
-  islr31UI("31")
+  islr31UI("31"),
+  islr32UI("32")
   )
   
 )

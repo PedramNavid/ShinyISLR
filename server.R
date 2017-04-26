@@ -5,6 +5,8 @@ library(ISLR)
 library(splines)
 library(gridExtra)
 library(scales)
+library(purrr)
+library(dplyr)
 source("theme.R")
 
 # Set theme
@@ -204,11 +206,45 @@ islr31 <- function(input, output, session) {
   })
 }
 
+islr32 <- function(input, output, session) {
+  x <- rnorm(100, sd = 1)
+  y <- 2 + 3*x + rnorm(100, sd = 3)
+  group = factor(rep(1:10,10))
+  df = data.frame(x = x, y = y, group = group)
+  
+  
+  plot_left <- ggplot(df, aes(x,y)) +
+    geom_point() + 
+    geom_abline(slope = 3, intercept = 2, size = 1, color = 'red') +
+    geom_smooth(method = 'lm', se = F, color = 'darkblue')
+  
+  make_a_model <- function(df, x) {
+    samp <- sample_frac(df, 0.7, replace = TRUE)
+    fit <- lm(y ~ x, data = samp)
+    intercept = coef(fit)[[1]]
+    slope = coef(fit)[[2]]
+    data.frame(intercept = intercept,
+      slope = slope)
+  }
+  
+  fit_df <- map_df(1:10, make_a_model, df = df)
+  
+  plot_right <- ggplot(df, aes(x,y)) + 
+    geom_blank() +
+    geom_abline(color = 'lightblue', slope = fit_df$slope, intercept = fit_df$intercept)  +
+    geom_abline(slope = 3, intercept = 2, size = 1, color = 'red') + 
+    geom_smooth(method = 'lm', se = F, color = 'darkblue') +
+    coord_cartesian(xlim=c(-2,2))
+  
+  grid.arrange(plot_left, plot_right, ncol = 2)
+}
+
 # Server Call ----
 shinyServer(function(input, output, session) {
 
   callModule(islr21, "21")
   callModule(islr22, "22")
   callModule(islr31, "31")
+  callModule(islr31, "32")
 
 })
