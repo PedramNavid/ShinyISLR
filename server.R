@@ -204,9 +204,8 @@ islr31 <- function(input, output, session) {
     yhat <- input$bhat0 + input$bhat1 * Advertising$TV
     paste0('RSS: ', comma(sum((yhat - Advertising$Sales)^2)))
   })
-}
-
-islr32 <- function(input, output, session) {
+  
+  # Accuracy of coefficient estimate
   x <- rnorm(100, sd = 1)
   y <- 2 + 3*x + rnorm(100, sd = 3)
   group = factor(rep(1:10,10))
@@ -236,7 +235,13 @@ islr32 <- function(input, output, session) {
     geom_smooth(method = 'lm', se = F, color = 'darkblue') +
     coord_cartesian(xlim=c(-2,2))
   
-  grid.arrange(plot_left, plot_right, ncol = 2)
+  output$plot32 <- renderPlot({
+    grid.arrange(plot_left, plot_right, ncol = 2)
+  })
+}
+
+islr32 <- function(input, output, session) {
+
 }
 
 # Server Call ----
