@@ -188,6 +188,7 @@ islr22 <- function(input, output, session) {
 
 # 3.1 Simple Linear Regression ----
 islr31 <- function(input, output, session) {
+  set.seed(12345)
   tv_sales_fit <- lm(Sales ~ TV, data = Advertising)
   pred_tv_sales <- predict(tv_sales_fit)
   
@@ -206,11 +207,13 @@ islr31 <- function(input, output, session) {
   })
   
   # Accuracy of coefficient estimate
-  x <- rnorm(100, sd = 1)
-  y <- 2 + 3*x + rnorm(100, sd = 3)
-  group = factor(rep(1:10,10))
+  nobs <- 100
+  x <- rnorm(nobs, sd = 1)
+  noise <- rnorm(nobs, sd = 3)
+  y <- 2 + 3*x + noise
+  group = factor(rep(1:10, length.out = nobs))
   df = data.frame(x = x, y = y, group = group)
-  
+  fit <- lm(y ~ x, data = df)
   
   plot_left <- ggplot(df, aes(x,y)) +
     geom_point() + 
@@ -228,14 +231,16 @@ islr31 <- function(input, output, session) {
   
   fit_df <- map_df(1:10, make_a_model, df = df)
   
-  plot_right <- ggplot(df, aes(x,y)) + 
-    geom_blank() +
-    geom_abline(color = 'lightblue', slope = fit_df$slope, intercept = fit_df$intercept)  +
-    geom_abline(slope = 3, intercept = 2, size = 1, color = 'red') + 
-    geom_smooth(method = 'lm', se = F, color = 'darkblue') +
-    coord_cartesian(xlim=c(-2,2))
-  
-  output$plot32 <- renderPlot({
+output$plot32 <- renderPlot({
+  se = as.logical(input$se.check)
+    plot_right <- ggplot(df, aes(x,y)) + 
+      geom_blank() +
+      geom_abline(color = 'lightblue', slope = fit_df$slope, intercept = fit_df$intercept)  +
+      geom_abline(slope = 3, intercept = 2, size = 1, color = 'red') + 
+      geom_smooth(method = 'lm', se = se, color = 'darkblue') +
+      coord_cartesian(xlim=c(-2,2))
+    
+    
     grid.arrange(plot_left, plot_right, ncol = 2)
   })
 }

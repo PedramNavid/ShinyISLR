@@ -143,7 +143,9 @@ islr31UI <- function(id, label = "Simple Linear Regression") {
             squares regression line. On the right, the same data is used, with the light blue
             lines showing ten different least square regression lines using ten different random
             samples of the original population. On average, the ten samples approach the population 
-            regression line. ")
+            regression line. "),
+          radioButtons(ns('se.check'), "View Standard Error", 
+            c("Yes" = T, "No" = F), selected = F)
         ),
         mainPanel(
           plotOutput(ns("plot32"))
